@@ -9,13 +9,10 @@ public class Client {
     }
 
     /**
-     * Perform a client's operation through the Dispatcher
-     * @param dispatcher Dispatcher that attend the clients
+     * Perform the client's operation through a dispatcher
+     * @param dispatcher Dispatcher object that attend the client on first instance
      */
-    public void performOperation(Dispatcher dispatcher)
-    {
-        dispatcher.attend(this);
-    }
+    public void performOperation(Dispatcher dispatcher) { dispatcher.attend(this); }
 
     public String getName() { return name; }
 

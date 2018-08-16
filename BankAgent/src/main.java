@@ -1,33 +1,29 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class main {
 
-    private static List<Client> clients = new ArrayList<>();
-
     /**
-     * Create a list of clients and a dispatcher object, then perform the operation of each client
+     * Create clients, employees and a dispatcher object, then perform the operation of each client
      * @param args Command line arguments
      */
     public static void main(String[] args) {
         System.out.println("\t----Beginning of the main----");
-        createClients(10);
-        Dispatcher dispatcher=new Dispatcher();
-        for(Client client:clients) {
-            client.performOperation(dispatcher);
+        Employees employees=new Employees();
+        Dispatcher dispatcher = new Dispatcher(employees);
+        Client actualClient;
+        for(int i=1;i<=20;i++)
+        {
+            actualClient=createClient(i);
+            actualClient.performOperation(dispatcher);
         }
-        dispatcher.finishDispatchersJob();
         System.out.println("\t----Ending of the main----");
     }
 
     /**
-     * Add clients with a random operation type in the list of clients
-     * @param numberOfClients Number of clients that will be added to the list of clients
+     * Create client with a random operation type.
+     * @param numberOfClient Client's ID.
+     * @return A new Client which was created.
      */
-    private static void createClients(int numberOfClients) {
-        for (int i = 1; i <= numberOfClients; i++) {
-            clients.add(new Client("Client#" + i, getRandomOperationType()));
-        }
+    private static Client createClient(int numberOfClient) {
+        return new Client("Client#" + numberOfClient, getRandomOperationType());
     }
 
     /**

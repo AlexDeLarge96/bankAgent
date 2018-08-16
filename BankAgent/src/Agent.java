@@ -1,66 +1,57 @@
 import java.util.function.Supplier;
 
-public class Agent implements Supplier<String> {
+public class Agent implements Supplier<Agent> {
 
     private String name;
-    private boolean availability;
+    private TypeOfAgent typeOfAgent;
     private Client assignedClient;
+    private String responseForClient;
     private int attentionTime;
 
-    public Agent(String name, boolean availability, Client assignedClient) {
+    public Agent(String name, TypeOfAgent typeOfAgent) {
         this.name = name;
-        this.availability = availability;
-        this.assignedClient = assignedClient;
+        this.typeOfAgent = typeOfAgent;
+        this.assignedClient = null;
     }
 
     /**
      * Override the get method from the Supplier Class for attend the clients
+     *
      * @return The response of the method attend client
      */
     @Override
-    public String get() {
+    public Agent get() {
         return attendClient();
     }
 
     /**
-     * Attend the client for about a random time and give him an answer
-     * @return The response for the client (String)
+     * Attend the client for about a random time and give him an answer.
+     * Then release the client.
+     *
+     * @return The agent which attend the client.
      */
-    public String attendClient() {
+    private Agent attendClient() {
         try {
             setAttentionTime((int) (Math.random() * 5) + 10);
             Thread.sleep(attentionTime * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        String result = assignedClient.getName() + " has been attended by " + name
-                + " and has performed a " + assignedClient.getOperation() + " operation.";
-        releaseClient();
-        return result;
+        setResponseForClient(assignedClient.getName() + " has been attended by " + name
+                + " and has performed a " + assignedClient.getOperation() + " operation.");
+        setAssignedClient(null);
+        return this;
     }
 
+    public String getResponseForClient() { return responseForClient; }
 
-    public boolean isAvailability() {
-        return availability;
-    }
+    public void setResponseForClient(String responseForClient) { this.responseForClient = responseForClient; }
 
-    public void setAvailability(boolean availability) {
-        this.availability = availability;
-    }
-
-    public void setAssignedClient(Client assignedClient) {
-        this.assignedClient = assignedClient;
-    }
-
-    public void setAttentionTime(int attentionTime) { this.attentionTime = attentionTime; }
+    public TypeOfAgent getTypeOfAgent() { return typeOfAgent; }
 
     public int getAttentionTime() { return attentionTime; }
 
-    /**
-     * Release the client that was attended and set availability of the agent as true
-     */
-    private void releaseClient() {
-        setAssignedClient(null);
-        setAvailability(true);
-    }
+    public void setAttentionTime(int attentionTime) { this.attentionTime = attentionTime; }
+
+    public void setAssignedClient(Client assignedClient) { this.assignedClient = assignedClient; }
 }
